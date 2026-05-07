@@ -1161,18 +1161,19 @@ function renderTable(page) {
       }
       const input = buildInput(column, row.values[column.id], (value) => {
         const previousValue = row.values[column.id];
-        if (column.style?.unique && wouldCreateDuplicateUniqueValue(page, row, column, value)) {
+        const nextValue = coerceCellValue(value, column.type);
+        if (column.style?.unique && wouldCreateDuplicateUniqueValue(page, row, column, nextValue)) {
           window.alert(`${column.name} must be unique.`);
           return;
         }
-        row.values[column.id] = value;
-        if (String(displayValue(previousValue, column.type)) !== String(displayValue(value, column.type))) {
+        row.values[column.id] = nextValue;
+        if (String(displayValue(previousValue, column.type)) !== String(displayValue(nextValue, column.type))) {
           markRowChanged(row, [column.id]);
           const rowNumber = page.rows.findIndex((candidate) => candidate.id === row.id) + 1;
           recordPageChange(
             page,
             "Cell edited",
-            `Row ${rowNumber}, ${column.name}: ${summarizeValue(previousValue, column.type)} -> ${summarizeValue(value, column.type)}`
+            `Row ${rowNumber}, ${column.name}: ${summarizeValue(previousValue, column.type)} -> ${summarizeValue(nextValue, column.type)}`
           );
         }
         runAutomations();
