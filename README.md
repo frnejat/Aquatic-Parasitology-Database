@@ -13,6 +13,8 @@ A lightweight browser-based database manager with:
 - Export selected rows or filtered rows to CSV
 - Save/load the whole database as a portable JSON file
 - Optional Supabase cloud sync across browsers
+- Per-page change tracking for grid edits
+- Pagination controls for larger row sets
 - Local persistence with `localStorage`
 
 ## Run Locally
@@ -32,6 +34,8 @@ That exports/imports the whole database as JSON so the same tabs, rows, columns,
 
 This project can now sync the whole database to Supabase so the same data appears in any browser.
 
+The admin PIN can also be shared through Supabase, so if cloud sync is configured you only need to set it once.
+
 ### 1. Create a Supabase project
 
 Create a project in Supabase, then open:
@@ -49,6 +53,13 @@ Open the SQL Editor in Supabase and run:
 - [supabase-setup.sql](C:\Users\farsh\Documents\database\supabase-setup.sql)
 
 This creates a table called `app_workspaces` that stores the whole app state.
+
+If you already created the table earlier, run this too:
+
+```sql
+alter table public.app_workspaces
+add column if not exists admin_pin text;
+```
 
 ### 3. Add your Supabase details
 

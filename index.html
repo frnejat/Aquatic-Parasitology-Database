@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Aquatic Parasitology Database</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -10,9 +13,9 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20260417b" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./supabase-config.js"></script>
+    <script src="./supabase-config.js?v=20260417b"></script>
   </head>
   <body>
     <div class="app-shell">
@@ -20,22 +23,14 @@
         <section class="brand-row">
           <div class="brand brand-top">
             <h1>Aquatic Parasitology Database</h1>
-            <div class="tiny-customize-group admin-only">
-              <label class="tiny-customize" for="banner-bg-color">
-                <span>Banner</span>
-                <input id="banner-bg-color" type="color" value="#ffffff" />
-              </label>
-              <label class="tiny-customize" for="banner-text-color">
-                <span>Text</span>
-                <input id="banner-text-color" type="color" value="#161616" />
-              </label>
-            </div>
             <details class="admin-menu">
               <summary>Admin</summary>
               <div class="admin-menu-body">
                 <p id="admin-status" class="admin-status">Locked</p>
                 <input id="admin-password-input" type="password" placeholder="Admin PIN" />
                 <button id="admin-login-btn" type="button" class="ghost-btn tiny-btn">Unlock</button>
+                <button id="admin-change-password-btn" type="button" class="ghost-btn tiny-btn admin-only">Change password</button>
+                <button id="export-changes-btn" type="button" class="ghost-btn tiny-btn admin-only">Export changes</button>
                 <button id="admin-lock-btn" type="button" class="ghost-btn tiny-btn">Lock</button>
               </div>
             </details>
@@ -79,24 +74,6 @@
           </details>
 
           <details class="menu-group">
-            <summary>Columns</summary>
-            <div class="menu-body">
-              <p class="menu-copy">Define the structure of the current page.</p>
-              <form id="column-form" class="inline-form">
-                <input id="column-name" type="text" placeholder="Column name" required />
-                <select id="column-type">
-                  <option value="text">Text</option>
-                  <option value="number">Number</option>
-                  <option value="date">Date</option>
-                  <option value="checkbox">Checkbox</option>
-                </select>
-                <button type="submit">Add column</button>
-              </form>
-              <div id="column-list" class="pill-list empty-state"></div>
-            </div>
-          </details>
-
-          <details class="menu-group">
             <summary>Automations</summary>
             <div class="menu-body">
               <p class="menu-copy">Auto-fill fields from rows on other pages.</p>
@@ -112,6 +89,9 @@
             </div>
           </details>
 
+        </section>
+
+        <section class="import-menu-row">
           <details class="menu-group">
             <summary>Import</summary>
             <div class="menu-body">
@@ -122,7 +102,7 @@
                   <p>Use this to generate a brand new tab with columns and rows automatically.</p>
                 </div>
                 <div class="import-stack">
-                  <div class="portable-db-tools">
+                  <div class="portable-db-tools admin-only">
                     <button id="save-db-btn" type="button" class="ghost-btn">Save database file</button>
                     <label class="ghost-btn file-label" for="load-db-input">Load database file</label>
                     <input id="load-db-input" type="file" accept=".json" hidden />
@@ -166,6 +146,7 @@
           </div>
           <div class="table-actions">
             <button id="add-row-btn">Add row</button>
+            <button id="add-column-btn" type="button" class="ghost-btn admin-only">Add column</button>
             <button id="filter-toggle-btn" type="button" class="ghost-btn tiny-btn">Filters</button>
             <input id="global-search-input" type="search" placeholder="Search all columns" />
             <select id="sort-column-select" aria-label="Sort column">
@@ -181,6 +162,20 @@
             <button id="export-csv-btn" type="button" class="ghost-btn">Export CSV</button>
             <button id="clear-filter-btn" type="button" class="ghost-btn">Clear filters</button>
             <span id="row-stats" class="row-stats">0 rows</span>
+          </div>
+          <div class="table-pagination">
+            <button id="page-prev-btn" type="button" class="ghost-btn tiny-btn">Prev</button>
+            <span id="page-indicator" class="page-indicator">Page 1 / 1</span>
+            <button id="page-next-btn" type="button" class="ghost-btn tiny-btn">Next</button>
+            <label class="page-size-label" for="page-size-select">
+              <span>Rows</span>
+              <select id="page-size-select">
+                <option value="50">50</option>
+                <option value="100" selected>100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+              </select>
+            </label>
           </div>
           <div id="table-scroll-top" class="table-scroll-top">
             <div id="table-scroll-track" class="table-scroll-track"></div>
@@ -198,6 +193,6 @@
         <span class="page-meta"></span>
       </button>
     </template>
-    <script src="./app.js"></script>
+    <script src="./app.js?v=20260417b"></script>
   </body>
 </html>

@@ -10,8 +10,8 @@
   --grid-header-bg: #eef5fc;
   --grid-cell-bg: #ffffff;
   --grid-line: #d9e4f0;
-  --banner-bg: #ffffff;
-  --banner-text: #15324d;
+  --banner-bg: #2b6cb0;
+  --banner-text: #ffffff;
   --accent: #2b6cb0;
   --accent-soft: #e8f1fb;
   --accent-strong: #1d4f8f;
@@ -184,12 +184,6 @@ textarea {
   color: var(--banner-text);
 }
 
-.tiny-customize-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
 .admin-menu {
   position: relative;
 }
@@ -229,22 +223,6 @@ textarea {
   color: var(--muted);
   font-size: 0.8rem;
   font-weight: 700;
-}
-
-.tiny-customize {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: var(--muted);
-  font-size: 0.75rem;
-  white-space: nowrap;
-}
-
-.tiny-customize input[type="color"] {
-  width: 2rem;
-  min-width: 2rem;
-  height: 2rem;
-  padding: 0.1rem;
 }
 
 .panel-heading,
@@ -424,29 +402,63 @@ textarea {
   padding: 0.45rem 0.75rem;
 }
 
-.column-style-card {
-  display: grid;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border: 1px solid var(--line);
-  background: var(--surface-soft);
+.column-rule-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.82rem;
 }
 
-.column-style-head {
+.column-rule-toggle input {
+  width: auto;
+}
+
+.column-head-wrap {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.3rem;
 }
 
-.column-style-controls {
+.column-admin-menu {
+  position: relative;
+}
+
+.column-admin-summary {
+  list-style: none;
+  cursor: pointer;
+  min-width: 1.35rem;
+  text-align: center;
+  color: var(--muted);
+  line-height: 1;
+}
+
+.column-admin-summary::-webkit-details-marker {
+  display: none;
+}
+
+.column-admin-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.2rem);
+  z-index: 12;
   display: grid;
-  grid-template-columns: 1.2fr auto auto 1fr;
-  gap: 0.5rem;
+  gap: 0.35rem;
+  min-width: 180px;
+  padding: 0.45rem;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 10px 24px rgba(23, 52, 86, 0.12);
 }
 
-.column-style-controls input[type="color"] {
-  min-width: 2.5rem;
+.column-admin-panel input[type="color"] {
+  min-width: 2.2rem;
   padding: 0.1rem;
+}
+
+.column-remove-btn {
+  color: var(--danger);
 }
 
 .mini-btn {
@@ -572,6 +584,34 @@ textarea {
   justify-content: flex-start;
 }
 
+.table-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+}
+
+.page-indicator {
+  color: var(--muted);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.page-size-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.page-size-label select {
+  width: auto;
+  min-width: 0;
+  padding: 0.28rem 0.38rem;
+}
+
 .table-actions > input,
 .table-actions > select {
   width: auto;
@@ -612,9 +652,15 @@ textarea {
 
 .controls-menu {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.35rem;
   align-items: start;
+}
+
+.import-menu-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.35rem;
 }
 
 .menu-group {
@@ -732,6 +778,82 @@ th {
   width: 100%;
 }
 
+.filter-multiselect {
+  display: grid;
+  gap: 0.18rem;
+  position: relative;
+}
+
+.filter-multiselect-summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.18rem 0.3rem;
+  border: 1px solid var(--grid-line);
+  border-radius: 0;
+  background: #fff;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filter-multiselect-summary::-webkit-details-marker {
+  display: none;
+}
+
+.filter-multiselect-search,
+.filter-multiselect-list,
+.filter-multiselect-actions {
+  display: none;
+}
+
+.filter-multiselect[open] {
+  z-index: 8;
+}
+
+.filter-multiselect[open] .filter-multiselect-search,
+.filter-multiselect[open] .filter-multiselect-list,
+.filter-multiselect[open] .filter-multiselect-actions {
+  display: block;
+}
+
+.filter-multiselect-search {
+  padding: 0.2rem 0.28rem;
+  border-radius: 0;
+  width: min(220px, 36vw);
+  background: #fff;
+  border: 1px solid var(--line-strong);
+}
+
+.filter-multiselect-list {
+  min-height: 4.7rem;
+  max-height: 10rem;
+  overflow: auto;
+  padding: 0.22rem 0.35rem;
+  width: min(220px, 36vw);
+  background: #fff;
+  border: 1px solid var(--line-strong);
+}
+
+.filter-multiselect-option {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.14rem 0;
+}
+
+.filter-multiselect-option input {
+  width: auto;
+}
+
+.filter-multiselect-actions {
+  display: flex;
+  gap: 0.18rem;
+  width: min(220px, 36vw);
+  padding: 0.2rem 0;
+  background: #fff;
+}
+
 td input[type="text"],
 td input[type="number"],
 td input[type="date"] {
@@ -765,6 +887,31 @@ td input[type="checkbox"] {
   text-align: right;
   color: var(--muted);
   background: #f3f8fe;
+}
+
+.changed-row-marker {
+  background: rgba(43, 108, 176, var(--change-row-alpha, 0.12)) !important;
+  box-shadow: inset 0 0 0 1px rgba(43, 108, 176, calc(var(--change-row-alpha, 0.12) + 0.08));
+}
+
+.changed-cell {
+  background: rgba(255, 214, 77, var(--change-cell-alpha, 0.22)) !important;
+  box-shadow: inset 0 0 0 1px rgba(212, 162, 0, calc(var(--change-cell-alpha, 0.22) + 0.08));
+}
+
+.changed-cell input,
+.changed-cell select {
+  background: transparent;
+}
+
+.required-missing {
+  box-shadow: inset 0 0 0 1px rgba(180, 35, 24, 0.28);
+  background: rgba(180, 35, 24, 0.06) !important;
+}
+
+.duplicate-value {
+  box-shadow: inset 0 0 0 1px rgba(180, 35, 24, 0.34);
+  background: rgba(255, 184, 0, 0.12) !important;
 }
 
 .sticky-left {
@@ -832,6 +979,10 @@ td:last-child {
     grid-template-columns: 1fr 1fr;
   }
 
+  .import-menu-row {
+    grid-template-columns: 1fr;
+  }
+
   .panel-heading,
   .card-heading,
   .table-actions {
@@ -853,13 +1004,14 @@ td:last-child {
     align-items: flex-start;
   }
 
-  .tiny-customize-group {
-    flex-wrap: wrap;
-  }
 }
 
 @media (max-width: 720px) {
   .controls-menu {
+    grid-template-columns: 1fr;
+  }
+
+  .import-menu-row {
     grid-template-columns: 1fr;
   }
 }
