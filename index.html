@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Aquatic Parasitology Database</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=20260507a" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js?v=20260507a"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <main class="main-content">
+        <section class="brand-row">
+          <div class="brand brand-top">
+            <h1>Aquatic Parasitology Database</h1>
+            <details class="admin-menu">
+              <summary>Admin</summary>
+              <div class="admin-menu-body">
+                <p id="admin-status" class="admin-status">Locked</p>
+                <input id="admin-password-input" type="password" placeholder="Admin PIN" />
+                <button id="admin-login-btn" type="button" class="ghost-btn tiny-btn">Unlock</button>
+                <button id="admin-change-password-btn" type="button" class="ghost-btn tiny-btn admin-only">Change password</button>
+                <button id="export-changes-btn" type="button" class="ghost-btn tiny-btn admin-only">Export changes</button>
+                <button id="admin-lock-btn" type="button" class="ghost-btn tiny-btn">Lock</button>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="tabs-panel">
+          <div class="panel-heading">
+            <div class="tabs-heading">
+              <h2>Pages</h2>
+              <button id="new-page-btn" class="ghost-btn">New tab</button>
+            </div>
+            <div class="tabs-toolbar">
+              <h2 id="page-title">Select a tab</h2>
+              <span id="page-description" class="visually-hidden">Build a page or choose a tab above.</span>
+              <label class="font-control font-control-grid" for="font-size-range">
+                <span>Grid text</span>
+                <input id="font-size-range" type="range" min="5" max="20" step="1" value="16" />
+                <input id="font-size-input" type="number" min="5" max="20" step="1" value="16" />
+                <output id="font-size-value">16px</output>
+              </label>
+              <button id="rename-page-btn" class="ghost-btn">Rename page</button>
+              <button id="delete-page-btn" class="danger-btn admin-only">Delete page</button>
+            </div>
+          </div>
+          <div id="page-list" class="tab-list"></div>
+        </section>
+
+        <section class="controls-menu">
+          <details class="menu-group">
+            <summary>Cloud</summary>
+            <div class="menu-body">
+              <p class="menu-copy">Sync this database across browsers with Supabase.</p>
+              <div class="cloud-sync-panel">
+                <p id="cloud-status" class="cloud-status">Local only</p>
+                <div class="portable-db-tools">
+                  <button id="cloud-sync-btn" type="button" class="ghost-btn">Sync now</button>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="menu-group">
+            <summary>Automations</summary>
+            <div class="menu-body">
+              <p class="menu-copy">Auto-fill fields from rows on other pages.</p>
+              <form id="automation-form" class="automation-form">
+                <select id="automation-source-page" required></select>
+                <select id="automation-source-match" required></select>
+                <select id="automation-current-match" required></select>
+                <select id="automation-source-value" required></select>
+                <select id="automation-target-field" required></select>
+                <button type="submit">Add automation</button>
+              </form>
+              <div id="automation-list" class="stack-list empty-state"></div>
+            </div>
+          </details>
+
+        </section>
+
+        <section class="import-menu-row">
+          <details class="menu-group">
+            <summary>Import</summary>
+            <div class="menu-body">
+              <p class="menu-copy">Import files as new pages, or paste rows directly into the current grid.</p>
+              <div class="import-panel">
+                <div class="import-copy">
+                  <h4>New Page Import</h4>
+                  <p>Use this to generate a brand new tab with columns and rows automatically.</p>
+                </div>
+                <div class="import-stack">
+                  <div class="portable-db-tools admin-only">
+                    <button id="save-db-btn" type="button" class="ghost-btn">Save database file</button>
+                    <label class="ghost-btn file-label" for="load-db-input">Load database file</label>
+                    <input id="load-db-input" type="file" accept=".json" hidden />
+                  </div>
+                  <input id="import-page-name" type="text" placeholder="New page name (optional)" />
+                  <form id="file-form" class="file-form">
+                    <input
+                      id="file-input"
+                      type="file"
+                      accept=".csv,.txt"
+                    />
+                    <label class="toggle-row">
+                      <input id="file-has-header" type="checkbox" checked />
+                      <span>Imported file has a header row</span>
+                    </label>
+                    <button id="file-btn" type="submit">Import file as new page</button>
+                  </form>
+                  <form id="paste-form" class="paste-form">
+                    <h4>Paste Into Current Grid</h4>
+                    <textarea
+                      id="paste-input"
+                      rows="5"
+                      placeholder="Paste rows from Excel here"
+                    ></textarea>
+                    <label class="toggle-row">
+                      <input id="paste-has-header" type="checkbox" />
+                      <span>Use pasted header names</span>
+                    </label>
+                    <button id="paste-btn" type="submit">Paste rows into grid</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="table-section">
+          <div class="table-header">
+            <h3>Rows</h3>
+            <p>Add and edit data directly in the table.</p>
+          </div>
+          <div class="table-actions">
+            <button id="add-row-btn">Add row</button>
+            <button id="add-column-btn" type="button" class="ghost-btn admin-only">Add column</button>
+            <button id="filter-toggle-btn" type="button" class="ghost-btn tiny-btn">Filters</button>
+            <input id="global-search-input" type="search" placeholder="Search all columns" />
+            <select id="sort-column-select" aria-label="Sort column">
+              <option value="">Sort by</option>
+            </select>
+            <select id="sort-direction-select" aria-label="Sort direction">
+              <option value="asc">A-Z</option>
+              <option value="desc">Z-A</option>
+            </select>
+            <button id="clear-selection-btn" type="button" class="ghost-btn tiny-btn">Clear selection</button>
+            <button id="duplicate-selected-btn" type="button" class="ghost-btn tiny-btn">Duplicate selected</button>
+            <button id="delete-selected-btn" type="button" class="ghost-btn tiny-btn admin-only">Delete selected</button>
+            <button id="export-csv-btn" type="button" class="ghost-btn">Export CSV</button>
+            <button id="clear-filter-btn" type="button" class="ghost-btn">Clear filters</button>
+            <span id="row-stats" class="row-stats">0 rows</span>
+          </div>
+          <div class="table-pagination">
+            <button id="page-prev-btn" type="button" class="ghost-btn tiny-btn">Prev</button>
+            <span id="page-indicator" class="page-indicator">Page 1 / 1</span>
+            <button id="page-next-btn" type="button" class="ghost-btn tiny-btn">Next</button>
+            <label class="page-size-label" for="page-size-select">
+              <span>Rows</span>
+              <select id="page-size-select">
+                <option value="50">50</option>
+                <option value="100" selected>100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+              </select>
+            </label>
+          </div>
+          <div id="table-scroll-top" class="table-scroll-top">
+            <div id="table-scroll-track" class="table-scroll-track"></div>
+          </div>
+          <div id="table-wrap" class="table-wrap empty-table">
+            <p>Create a page and add columns to start entering data.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="page-item-template">
+      <button class="page-item">
+        <span class="page-name"></span>
+        <span class="page-meta"></span>
+      </button>
+    </template>
+    <script src="./app.js?v=20260507a"></script>
+  </body>
+</html>
