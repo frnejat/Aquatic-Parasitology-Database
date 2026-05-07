@@ -239,6 +239,12 @@ els.addRowBtn.addEventListener("click", () => {
     return;
   }
 
+  const missingUniqueRows = getRowsWithMissingUniqueValues(page);
+  if (missingUniqueRows.length) {
+    window.alert("Fill the unique cells before adding another row.");
+    return;
+  }
+
   const duplicateUniqueRows = getRowsWithDuplicateUniqueValues(page);
   if (duplicateUniqueRows.length) {
     window.alert("Fix duplicate values in unique columns before adding another row.");
@@ -1149,7 +1155,10 @@ function renderTable(page) {
       const td = document.createElement("td");
       applyRowStyle(td, row);
       applyColumnCellStyle(td, column, false);
-      if (column.style?.required && isEmptyRequiredValue(row.values[column.id], column.type)) {
+      if (
+        (column.style?.required || column.style?.unique) &&
+        isEmptyRequiredValue(row.values[column.id], column.type)
+      ) {
         td.classList.add("required-missing");
       }
       if (column.style?.unique && hasDuplicateUniqueValue(page, row, column)) {
@@ -1550,6 +1559,17 @@ function getRowsWithMissingRequiredValues(page) {
 
   return page.rows.filter((row) =>
     requiredColumns.some((column) => isEmptyRequiredValue(row.values[column.id], column.type))
+  );
+}
+
+function getRowsWithMissingUniqueValues(page) {
+  const uniqueColumns = page.columns.filter((column) => column.style?.unique);
+  if (!uniqueColumns.length) {
+    return [];
+  }
+
+  return page.rows.filter((row) =>
+    uniqueColumns.some((column) => isEmptyRequiredValue(row.values[column.id], column.type))
   );
 }
 
